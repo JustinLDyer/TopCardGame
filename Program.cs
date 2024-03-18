@@ -11,7 +11,7 @@ namespace TopCard
         public bool Taken = false;
     }
 
-    class Program
+    class TopCardGame
     {
         private const int NumberOfCards = 9;
         private const int WinningScore = 21;
@@ -38,7 +38,7 @@ namespace TopCard
         {
             deck.shuffle();
 
-            for (int i = 0; i < 9; i++)
+            for (int i = 0; i < NumberOfCards; i++)
             {
                 var card = deck.draw();
                 if (card != null) {
@@ -76,9 +76,9 @@ namespace TopCard
             return cardValue;
         }
 
-        static void PrintTopCards(bool debug)
+        static void PrintTopCards()
         {
-            for (int i = 0; i < 9; i++)
+            for (int i = 0; i < NumberOfCards; i++)
             {
                 if (topCards[i].Taken)
                 {
@@ -86,9 +86,7 @@ namespace TopCard
                 }
                 else
                 {
-                    Console.WriteLine((i+1).ToString() + 
-                                       "   " + 
-                                       (debug == true ? topCards[i].DisplayText : "???"));
+                    Console.WriteLine((i+1).ToString() + "   " + "???");
                 }
             }
         }
@@ -99,7 +97,7 @@ namespace TopCard
             Console.WriteLine($"Your current score is {currentScore}");
             Console.WriteLine("");
 
-            PrintTopCards(false);
+            PrintTopCards();
 
             bool validBoardSelection = false;
             int selection = 0;
@@ -108,7 +106,7 @@ namespace TopCard
                 string? topCardSelection = Console.ReadLine();
                 if (Int32.TryParse(topCardSelection, out selection))
                 {
-                    if (selection >= 1 && selection <= 9)
+                    if (selection >= 1 && selection <= NumberOfCards)
                     {
                         if (topCards[selection - 1].Taken)
                         {
@@ -195,7 +193,7 @@ namespace TopCard
                 
                 if (currentScore == WinningScore)
                 {
-                    Console.WriteLine("You have reached ${WinningScore}. You win!");
+                    Console.WriteLine($"You have reached {WinningScore}. You win!");
                     gameOver = true;
                 }
                 else if (currentScore > WinningScore)
