@@ -4,13 +4,6 @@ using DeckOfCardsLibrary;
 
 namespace TopCard
 {
-    class CardFromBoard
-    {
-        public string DisplayText = "";
-        public int CardValue = 0;
-        public bool Taken = false;
-    }
-
     class TopCardGame
     {
         private const int NumberOfCards = 9;
@@ -22,7 +15,7 @@ namespace TopCard
         private static int numAces = 0;
         private static int currentScore = 0;
 
-        private static CardFromBoard[] topCards = new CardFromBoard[NumberOfCards];
+        private static BoardCard[] topCards = new BoardCard[NumberOfCards];
 
         private static void PrintWelcome()
         {
@@ -42,7 +35,7 @@ namespace TopCard
             {
                 var card = deck.draw();
                 if (card != null) {
-                    topCards[i] = new CardFromBoard();
+                    topCards[i] = new BoardCard();
                     topCards[i].DisplayText = GetDisplayText(card);
                     topCards[i].CardValue = GetCardValue(card.rank);
                     topCards[i].Taken = false;
