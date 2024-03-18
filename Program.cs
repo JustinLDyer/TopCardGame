@@ -13,17 +13,21 @@ namespace TopCard
 
     class Program
     {
+        private const int NumberOfCards = 9;
+        private const int WinningScore = 21;
+        private const string OptionToKeep = "K";
+        private const string OptionTop = "T";
         private static Deck deck = Deck.get();
     
         private static int numAces = 0;
         private static int currentScore = 0;
 
-        private static CardFromBoard[] topCards = new CardFromBoard[9];
+        private static CardFromBoard[] topCards = new CardFromBoard[NumberOfCards];
 
         private static void PrintWelcome()
         {
             Console.WriteLine("***TOP CARD***\n");
-            Console.WriteLine("The object of the game is to get as close to 21 without going over.");
+            Console.WriteLine($"The object of the game is to get as close to {WinningScore} without going over.");
             Console.WriteLine("Select a card from the board. The value of that card will be displayed.");
             Console.WriteLine("You can either take the revealed card or take the card from the top of the deck.");
             Console.WriteLine("If you take the top card, the card you selected from the board will be available as a future selection so remember it.\n");
@@ -135,7 +139,7 @@ namespace TopCard
                 Console.Write("Do you want to (K)eep that card or do you want the (T)op card? ");
                 optionTyped = Console.ReadLine();
                 optionTyped = optionTyped!.ToUpper();
-                if (optionTyped == "K" || optionTyped == "T")
+                if (optionTyped == OptionToKeep || optionTyped == OptionTop)
                 {
                     validOptionTyped = true;
                 }
@@ -146,7 +150,7 @@ namespace TopCard
             }
 
             int cardSelectedValue = 0;
-            if (optionTyped == "K")
+            if (optionTyped == OptionToKeep)
             {
                 cardSelectedValue = topCards[selection - 1].CardValue;
                 topCards[selection - 1].Taken = true;
@@ -170,7 +174,7 @@ namespace TopCard
             {
                 numAces++;
             }
-            if (currentScore > 21)
+            if (currentScore > WinningScore)
             {
                 if (numAces > 0)
                 {
@@ -189,12 +193,12 @@ namespace TopCard
             {
                 PlayTurn();
                 
-                if (currentScore == 21)
+                if (currentScore == WinningScore)
                 {
-                    Console.WriteLine("You have reached 21. You win!");
+                    Console.WriteLine("You have reached ${WinningScore}. You win!");
                     gameOver = true;
                 }
-                else if (currentScore > 21)
+                else if (currentScore > WinningScore)
                 {
                     Console.WriteLine($"Your score is {currentScore}. You have busted.");
                     gameOver = true;
