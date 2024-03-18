@@ -65,5 +65,54 @@ namespace TopCard
 
             return selection;
         }
+
+        public static string GetUserChoice()
+        {
+            bool validOptionTyped = false;
+            string? optionTyped = "";
+            while (!validOptionTyped)
+            {
+                Console.Write("Do you want to (K)eep that card or do you want the (T)op card? ");
+                optionTyped = Console.ReadLine();
+                optionTyped = optionTyped!.ToUpper();
+                if (optionTyped == Constants.OptionToKeep || optionTyped == Constants.OptionTop)
+                {
+                    validOptionTyped = true;
+                }
+                else
+                {
+                    Console.WriteLine("Invalid selection");
+                }
+            }
+
+            return optionTyped;
+        }
+
+        public static void DisplayWinningMessage()
+        {
+            Console.WriteLine($"You have reached {Constants.WinningScore}. You win!");
+        }
+
+        public static void DisplayBustedMessage()
+        {
+            Console.WriteLine("You have busted");
+        }
+
+        public static string? GetKeepPlaying()
+        {
+            string? keepPlaying = "";
+            while (keepPlaying! != "Y" && keepPlaying! != "N")
+            {
+                Console.Write("Would you like to keep playing? (Y/N) ");
+                keepPlaying = Console.ReadLine();
+                keepPlaying = keepPlaying!.ToUpper();
+            }
+            return keepPlaying;
+        }
+
+        public static void PrintAllCardsDrawnMessage()
+        {
+            Console.WriteLine("All cards have been drawn. This should never happen in blackjack.");
+        }
     }
 }
