@@ -6,32 +6,18 @@ namespace TopCard
 {
     class TopCardGame
     {
-        private const int NumberOfCards = 9;
-        private const int WinningScore = 21;
-        private const string OptionToKeep = "K";
-        private const string OptionTop = "T";
         private static Deck deck = Deck.get();
     
         private static int numAces = 0;
         private static int currentScore = 0;
 
-        private static BoardCard[] topCards = new BoardCard[NumberOfCards];
-
-        private static void PrintWelcome()
-        {
-            Console.WriteLine("***TOP CARD***\n");
-            Console.WriteLine($"The object of the game is to get as close to {WinningScore} without going over.");
-            Console.WriteLine("Select a card from the board. The value of that card will be displayed.");
-            Console.WriteLine("You can either take the revealed card or take the card from the top of the deck.");
-            Console.WriteLine("If you take the top card, the card you selected from the board will be available as a future selection so remember it.\n");
-            Console.WriteLine("Disclaimer: This game is a personal educational project created solely for non-commercial purposes. It is not affiliated with or endorsed by any official entities associated with the original game show. Any references to the original game show are purely for the purpose of nostalgia. No challenge of ownership or rights to the original game show's intellectual property is intended or implied. All trademarks and copyrights belong to their respective owners.");
-        }
+        private static BoardCard[] topCards = new BoardCard[Constants.NumberOfCards];
 
         private static void InitializeVariables()
         {
             deck.shuffle();
 
-            for (int i = 0; i < NumberOfCards; i++)
+            for (int i = 0; i < Constants.NumberOfCards; i++)
             {
                 var card = deck.draw();
                 if (card != null) {
@@ -69,58 +55,14 @@ namespace TopCard
             return cardValue;
         }
 
-        static void PrintTopCards()
-        {
-            for (int i = 0; i < NumberOfCards; i++)
-            {
-                if (topCards[i].Taken)
-                {
-                    Console.WriteLine((i+1).ToString() + "   " + "TAKEN");
-                }
-                else
-                {
-                    Console.WriteLine((i+1).ToString() + "   " + "???");
-                }
-            }
-        }
-
         static void PlayTurn()
         {
             Console.WriteLine("");
-            Console.WriteLine($"Your current score is {currentScore}");
+            UserInterface.PrintScore(currentScore);
             Console.WriteLine("");
 
-            PrintTopCards();
-
-            bool validBoardSelection = false;
-            int selection = 0;
-            while (!validBoardSelection) {
-                Console.Write("Which card do you want? ");
-                string? topCardSelection = Console.ReadLine();
-                if (Int32.TryParse(topCardSelection, out selection))
-                {
-                    if (selection >= 1 && selection <= NumberOfCards)
-                    {
-                        if (topCards[selection - 1].Taken)
-                        {
-                            Console.WriteLine("That card has already been taken.");
-                        }
-                        else
-                        {
-                            validBoardSelection = true;
-                        }
-                    }
-                    else
-                    {
-                        Console.WriteLine("Invalid selection");
-                    }
-                }
-                else
-                {
-                    Console.WriteLine("Invalid selection.");
-                }
-            }
-
+            UserInterface.PrintTopCards(topCards);
+            int selection = UserInterface.GetBoardCardSelection(topCards);
             Console.WriteLine("The card is the " + topCards[selection - 1].DisplayText);
 
             bool validOptionTyped = false;
@@ -130,7 +72,7 @@ namespace TopCard
                 Console.Write("Do you want to (K)eep that card or do you want the (T)op card? ");
                 optionTyped = Console.ReadLine();
                 optionTyped = optionTyped!.ToUpper();
-                if (optionTyped == OptionToKeep || optionTyped == OptionTop)
+                if (optionTyped == Constants.OptionToKeep || optionTyped == Constants.OptionTop)
                 {
                     validOptionTyped = true;
                 }
@@ -141,7 +83,7 @@ namespace TopCard
             }
 
             int cardSelectedValue = 0;
-            if (optionTyped == OptionToKeep)
+            if (optionTyped == Constants.OptionToKeep)
             {
                 cardSelectedValue = topCards[selection - 1].CardValue;
                 topCards[selection - 1].Taken = true;
@@ -165,7 +107,7 @@ namespace TopCard
             {
                 numAces++;
             }
-            if (currentScore > WinningScore)
+            if (currentScore > Constants.WinningScore)
             {
                 if (numAces > 0)
                 {
@@ -178,25 +120,26 @@ namespace TopCard
         static void Main(string[] args)
         {
             InitializeVariables();
-            PrintWelcome();
+            UserInterface.PrintWelcomeMessage();
             bool gameOver = false;
             while (!gameOver)
             {
                 PlayTurn();
                 
-                if (currentScore == WinningScore)
+                if (currentScore == Constants.WinningScore)
                 {
-                    Console.WriteLine($"You have reached {WinningScore}. You win!");
+                    Console.WriteLine($"You have reached {Constants.WinningScore}. You win!");
                     gameOver = true;
                 }
-                else if (currentScore > WinningScore)
+                else if (currentScore > Constants.WinningScore)
                 {
-                    Console.WriteLine($"Your score is {currentScore}. You have busted.");
+                    UserInterface.PrintScore(currentScore);
+                    Console.WriteLine("You have busted.");
                     gameOver = true;
                 }
                 else
                 {
-                    Console.WriteLine($"Your score is {currentScore}");
+                    UserInterface.PrintScore(currentScore);
                     string? keepPlaying = "";
                     while (keepPlaying! != "Y" && keepPlaying! != "N")
                     {
