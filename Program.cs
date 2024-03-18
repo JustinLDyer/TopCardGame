@@ -65,22 +65,7 @@ namespace TopCard
             int selection = UserInterface.GetBoardCardSelection(topCards);
             Console.WriteLine("The card is the " + topCards[selection - 1].DisplayText);
 
-            bool validOptionTyped = false;
-            string? optionTyped = "";
-            while (!validOptionTyped)
-            {
-                Console.Write("Do you want to (K)eep that card or do you want the (T)op card? ");
-                optionTyped = Console.ReadLine();
-                optionTyped = optionTyped!.ToUpper();
-                if (optionTyped == Constants.OptionToKeep || optionTyped == Constants.OptionTop)
-                {
-                    validOptionTyped = true;
-                }
-                else
-                {
-                    Console.WriteLine("Invalid selection");
-                }
-            }
+            string optionTyped = UserInterface.GetUserChoice();
 
             int cardSelectedValue = 0;
             if (optionTyped == Constants.OptionToKeep)
@@ -98,7 +83,7 @@ namespace TopCard
                 }
                 else
                 {
-                    Console.WriteLine("All cards have been drawn. This should never happen in blackjack.");
+                    UserInterface.PrintAllCardsDrawnMessage();
                 }
             }
 
@@ -128,25 +113,19 @@ namespace TopCard
                 
                 if (currentScore == Constants.WinningScore)
                 {
-                    Console.WriteLine($"You have reached {Constants.WinningScore}. You win!");
+                    UserInterface.DisplayWinningMessage();
                     gameOver = true;
                 }
                 else if (currentScore > Constants.WinningScore)
                 {
                     UserInterface.PrintScore(currentScore);
-                    Console.WriteLine("You have busted.");
+                    UserInterface.DisplayBustedMessage();
                     gameOver = true;
                 }
                 else
                 {
                     UserInterface.PrintScore(currentScore);
-                    string? keepPlaying = "";
-                    while (keepPlaying! != "Y" && keepPlaying! != "N")
-                    {
-                        Console.Write("Would you like to keep playing? (Y/N) ");
-                        keepPlaying = Console.ReadLine();
-                        keepPlaying = keepPlaying!.ToUpper();
-                    }
+                    string? keepPlaying = UserInterface.GetKeepPlaying();
                     if (keepPlaying == "N")
                     {
                         gameOver = true;
